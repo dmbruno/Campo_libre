@@ -1,0 +1,179 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(128, 128, 128, 0.269);
+    color: #333;
+    padding: 20px;
+}
+
+/* Títulos */
+h1, h2 {
+    text-align: center;
+    font-size: 1.9rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-family: Audiowide, cursive;
+}
+
+/* Botón "Volver al Inicio" */
+.volver-index-btn {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 80%;
+    font-family: "Neucha", cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    
+}
+
+.volver-index-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Formulario */
+form {
+    max-width: 100%;
+    margin: 0 auto 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-family: Audiowide, cursive;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Neucha", cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Tabla de Stock */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    overflow-x: auto;
+    display: block; /* Habilitar scroll horizontal */
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #3498db;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+table td {
+    font-size: 0.9rem;
+}
+
+.mensaje{
+    font-size: 1rem;
+    color: red;
+    text-align: center;
+}
+
+/* Historial de Ventas */
+.historial-ventas {
+    max-height: 200px; /* Limitar la altura */
+    overflow-y: auto;  /* Habilitar scroll vertical */
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.historial-ventas ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.historial-ventas li {
+    margin-bottom: 8px;
+    padding: 10px;
+    background-color: #e7f3ff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 1.9rem;
+        font-family: Audiowide, cursive;
+        
+    }
+
+    form input,
+    form select,
+    form button {
+        font-size: 0.9rem;
+        
+    }
+
+    table th, table td {
+        font-size: 0.8rem;
+    }
+
+    .historial-ventas li {
+        font-size: 0.8rem;
+    }
+    .mensaje{
+        font-size: 1rem;
+        color: red;
+        text-align: center;
+    }
+}

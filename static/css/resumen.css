@@ -1,0 +1,176 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: rgba(128, 128, 128, 0.269);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Botón para volver al inicio */
+.volver-index-btn {
+    display: block;
+    margin: 20px auto 20px;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 50%;
+    font-family: "neucha", cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    
+}
+
+.volver-index-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Títulos */
+h1, h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-family: Audiowide, cursive;
+}
+
+/* Contenedor principal */
+section {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    
+}
+
+/* Tabla de Stock */
+table {
+    width: 100%; /* Ajusta la tabla al 100% del contenedor */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: #fff;
+    text-align: center;
+    font-size: 0.9rem; /* Tamaño de texto reducido para caber en pantallas pequeñas */
+    table-layout: fixed; /* Distribución fija de las columnas */
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px; /* Reducimos el padding para más espacio */
+    word-wrap: break-word; /* Ajusta el texto para que no se desborde */
+    font-size: 1rem; /* Reducimos el tamaño del texto */
+}
+
+table th {
+    background-color: #3498db;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+
+table td {
+    font-size: 0.6rem;
+}
+
+/* Estilo adicional para pantallas pequeñas */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.8rem;
+    }
+
+    table th, table td {
+        padding: 6px; /* Reduce aún más el padding para pantallas pequeñas */
+    }
+}
+
+/* Formulario de Ajuste de Stock */
+form {
+    max-width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-family: Audiowide, cursive;
+}
+
+form input,
+form select {
+    width: calc(100% - 40px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: Audiowide, cursive;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: Audiowide, cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para secciones separadas */
+h2 {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-family: Audiowide, cursive;
+}
+
+/* Diseño responsivo general */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 1.9rem;
+        font-family: Audiowide, cursive;
+       
+    }
+
+    form input,
+    form select,
+    form button {
+        font-size: 1rem;
+        font-family: "neucha", cursive;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    
+    }
+
+    form {
+        padding: 10px;
+    }
+}

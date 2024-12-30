@@ -1,0 +1,179 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(128, 128, 128, 0.269);
+    color: #333;
+    padding: 20px;
+}
+
+.back-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: "Neucha", cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor principal */
+section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-family: Audiowide, cursive;
+    font-size: 1.9rem;
+}
+
+/* Formulario */
+form {
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: Audiowide, cursive;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    box-sizing: border-box; /* Asegura que todos los elementos tengan el mismo tamaño */
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Neucha", cursive;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+.graph-title{
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Audiowide, cursive;
+    font-size: 1.9rem;
+}
+/* Contenedor del gráfico */
+.graph-container {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 80px;
+}
+
+.graph-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Botones */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    
+}
+
+.buttons form {
+    width: 48%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    th, td {
+        font-size: 0.8rem;
+    }
+
+    form button {
+        font-size: 0.9rem;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        border-radius: 5px;
+    }
+
+    .buttons form {
+        width: 100%;
+        margin-bottom: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+}

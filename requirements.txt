@@ -1,0 +1,6 @@
+flask
+openpyxl
+flask-wtf
+flask-debugtoolbar
+python-dotenv
+gunicorn

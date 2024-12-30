@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recolecciones</title>
+    <link rel="stylesheet" href="/static/css/recolecciones.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <section>
+        <button onclick="location.href='/'" class="volver-index-btn">Volver al Inicio</button>
+        <h1 class="historial-recolecciones-title">Recolecciones</h1>
+        
+        <form method="POST" action="/recolecciones">
+            <label for="carro">Carro:</label>
+            <input type="text" name="carro" required>
+
+            <label for="categoria">Categoría:</label>
+            <select name="categoria" required>
+                <option value="Grandes">Grandes</option>
+                <option value="Premium">Premium</option>
+                <option value="Medianos">Medianos</option>
+                <option value="Doble yema">Doble yema</option>
+                <option value="Rotos">Rotos</option>
+            </select>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" name="cantidad" required>
+
+            <label for="turno">Turno:</label>
+            <select name="turno" required>
+                <option value="11:30">11:30</option>
+                <option value="15:30">15:30</option>
+            </select>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+
+            <button type="submit">Guardar</button>
+            
+        </form>
+    </section>
+
+
+    
+    <h2 class="historial-recolecciones-title">Historial de Recolecciones</h2>
+    <div class="historial-recolecciones">
+        <ul>
+            {% for reco in recolecciones %}
+            <li>{{ reco['carro'] }} - {{ reco['categoria'] }}: {{ reco['cantidad'] }} ({{ reco['turno'] }}) - {{
+                reco['fecha'] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>
