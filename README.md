@@ -103,7 +103,7 @@ Campo Libre es una aplicación web desarrollada en Flask que permite gestionar e
 
 
 ### Pantalla de Resumen de Stock
-![Pantalla de Resumen de Stock](static/images/resumen.png)
+![Pantalla de Resumen de Stock](static/images/resumen_stock.png)
 
 
 ## Autor
