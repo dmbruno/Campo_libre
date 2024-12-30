@@ -111,6 +111,4 @@ Campo Libre es una aplicación web desarrollada en Flask que permite gestionar e
 **Diego Bruno**  
 Programador en Python y Flask, especializado en el desarrollo de aplicaciones web y bots automatizados.  
 
----
 
-Este archivo `README.md` está diseñado para proporcionar toda la información necesaria sobre tu proyecto, dejando espacios para que simplemente agregues tus capturas de pantalla. Si necesitas alguna modificación adicional, ¡no dudes en pedírmelo! 😊
