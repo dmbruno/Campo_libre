@@ -116,6 +116,6 @@ Campo Libre es una aplicación web desarrollada en Flask que permite gestionar e
 ## Autor
 
 **Diego Bruno**  
-Programador en Python y Flask, especializado en el desarrollo de aplicaciones web y bots automatizados.  
+Programador en Python y Flask, especializado en el desarrollo de aplicaciones web.
 
 
