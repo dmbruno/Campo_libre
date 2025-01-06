@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venta de Cajas</title>
+</head>
+<body>
+    <header>
+        <h1>Venta de Cajas</h1>
+    </header>
+
+    <section>
+        <h2>Registrar Venta de Cajas</h2>
+        <form method="POST">
+            <label for="vendedor">Nombre del Vendedor:</label>
+            <input type="text" name="vendedor" required>
+        
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+        
+            <label for="cantidad_cajas">Cantidad de Cajas:</label>
+            <input type="number" name="cantidad_cajas" required>
+        
+            <button type="submit">Guardar Venta de Cajas</button>
+        </form>
+
+        <h2>Historial de Ventas de Cajas</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Vendedor</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas_cajas %}
+                <tr>
+                    <td>{{ venta['vendedor'] }}</td>
+                    <td>{{ venta['cantidad'] }}</td>
+                    <td>{{ venta['fecha'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/">Volver al Inicio</a>
+    </section>
+</body>
+</html>

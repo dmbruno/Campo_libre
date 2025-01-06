@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Porcentaje de Postura de Gallinas por Carro</title>
+    <link rel="stylesheet" href="/static/css/posturas.css">
+</head>
+<body>
+    <header>
+        <h1>Porcentaje de Postura</h1>
+    </header>
+
+    <section>
+        <h2>Historial de Posturas</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Carro</th>
+                    <th>Cantidad de Gallinas</th>
+                    <th>Cantidad de Huevos Recolectados</th>
+                    <th>Porcentaje de Postura (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for postura in posturas %}
+                    <tr>
+                        <td>{{ postura.carro }}</td>
+                        <td>{{ postura.cantidad_gallinas }}</td>
+                        <td>{{ postura.cantidad_huevos }}</td>
+                        <td>{{ postura.porcentaje_postura }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </section>
+    
+    <div class="volver">
+        <a href="/">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -42,6 +42,14 @@ section {
     margin-top: 20px;
 }
 
+section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: 'audiowide', sans-serif;
+    text-align: center;
+}
+
 /* Form Labels */
 label {
     display: block;
@@ -83,39 +91,45 @@ table {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-    max-height: 300px;
-    overflow-y: scroll;
+    table-layout: fixed;  /* Esto asegura que las celdas se alineen correctamente */
 }
 
 table th, table td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ddd;
+    word-wrap: break-word;  /* Esto permite que las celdas de la tabla se ajusten bien */
 }
 
+/* Fijar encabezado de la tabla */
 table th {
     background-color: #4CAF50;
     color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
 }
 
-h2{
-    font-family: 'audiowide', sans-serif;
-    text-align: center;
+/* Historial container */
+.historial-container {
+    max-height: 300px;  /* Ajusta este valor según el tamaño que desees */
+    overflow-y: scroll;  /* Activa el scroll solo para la tabla */
 }
 
 /* Links */
-a {
+.volver {
     color: #4caf50;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
     margin: 20px;
-    text-align: center;
 }
 
-.a:hover {
+.volver:hover {
     color: #45a049;
 }
+
+
 
 /* Responsive Design for mobile */
 @media (max-width: 768px) {

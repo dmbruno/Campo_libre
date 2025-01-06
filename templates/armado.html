@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Armado de Maplets y Cajas</title>
+    <link rel="stylesheet" href="/static/css/armado.css">
+</head>
+
+<body>
+    <header>
+        <h1>Armado de Maplets y Cajas</h1>
+    </header>
+
+    <section>
+        <!-- Botones para alternar entre formularios -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('maplet')">Armado de Maplet</button>
+            <button class="tab-button" onclick="switchTab('caja')">Armado de Caja</button>
+        </div>
+
+
+        <!-- Formulario de armado de maplets -->
+        <div class="tab-content maplet-form">
+            <h2>Cargar Maplet</h2>
+            <form method="POST">
+                <input type="hidden" name="tipo" value="maplet"> <!-- Campo oculto para 'tipo' -->
+
+                <label for="categoria_maplet">Categoría de Maplet:</label>
+                <select name="categoria_maplet" required>
+                    <option value="Premium">Premium</option>
+                    <option value="Grandes">Grandes</option>
+                    <option value="Medianos">Medianos</option>
+                    <option value="Pequeños">Pequeños</option>
+                    <option value="Doble Yema">Doble Yema</option>
+                </select>
+                <br>
+                <label for="cantidad_maplets">Cantidad:</label>
+                <input type="number" name="cantidad_maplets" required>
+                <br>
+                <label for="fecha_maplet">Fecha de Armado:</label>
+                <input type="date" name="fecha_maplet" required>
+                <br>
+                <button type="submit">Guardar Maplet</button>
+            </form>
+        </div>
+
+        <!-- Formulario de armado de cajas -->
+        <div class="tab-content caja-form">
+            <h2>Cargar Caja</h2>
+            <form method="POST">
+                <input type="hidden" name="tipo" id="tipo" value="caja"> <!-- Campo oculto para 'tipo' -->
+                <label for="cantidad_cajas">Cantidad:</label>
+                <input type="number" name="cantidad_cajas" required>
+                <br>
+                <label for="fecha_caja">Fecha de Armado:</label>
+                <input type="date" name="fecha_caja" required>
+                <br>
+                <button type="submit">Guardar Caja</button>
+            </form>
+        </div>
+    </section>
+
+    <a href="/">Volver al Inicio</a>
+
+    <script src="/static/js/armado.js"></script>
+</body>
+
+</html>

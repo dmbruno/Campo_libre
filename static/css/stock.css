@@ -1,0 +1,197 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header h1 {
+    background-color: #4CAF50;
+    font-family: 'audiowide', sans-serif;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.stock{
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #4caf4fa1;
+    margin-right: 40px;
+    margin-left: 40px;
+    border-radius: 5px;
+    padding: 20px;
+    
+}
+
+
+h1,
+h2 {
+    text-align: center;
+    font-family: 'audiowide', sans-serif;
+    font-size: 32px;
+    color: #333;
+    padding: 20px;
+    font-weight: bold;
+}
+
+/* Tabs and Buttons */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 12px 30px;
+    margin: 0 10px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    background-color: #28a745;
+    color: white;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    font-size: 18px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Content Section */
+.content {
+    text-align: center;
+    margin: 30px 0;
+}
+
+/* Table Styling */
+table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+table th,
+table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 16px;
+}
+
+table th {
+    background-color: #28a745;
+    color: white;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Form Section */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+form label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+
+
+.volver a{
+    color: #4caf50;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.volver:hover {
+    color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    h1,
+    h2 {
+        font-size: 26px;
+    }
+
+    table th,
+    table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    form {
+        width: 100%;
+        padding: 15px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .tab {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}

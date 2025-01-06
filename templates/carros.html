@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Gestión de Carros</title>
+    <link rel="stylesheet" href="/static/css/carros.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Carros</h1>
+    </header>
+
+    <section>
+        <h2>Registrar Carro</h2>
+        <form action="/carros" method="POST">
+            <label for="carro">Número de Carro:</label>
+            <input type="number" name="carro" required>
+            <br>
+            <label for="cantidad_gallinas">Cantidad de Gallinas:</label>
+            <input type="number" name="cantidad_gallinas" required>
+            <br>
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+
+            <br><br>
+            <button type="submit">Guardar</button>
+        </form>
+
+        <h2>Carros Registrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Carro</th>
+                    <th>Cantidad de Gallinas</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carro in carros %}
+                    <tr>
+                        <td>{{ carro['carro'] }}</td>
+                        <td>{{ carro['cantidad_gallinas'] }}</td>
+                        <td>{{ carro['fecha'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/">Volver al Inicio</a>
+    </section>
+</body>
+</html>

@@ -4,105 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes de Ventas</title>
-    <link rel="stylesheet" href="/static/css/reportes.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Reportes</title>
+    <link rel="stylesheet" href="/static/css/reportes.css">
 </head>
 
 <body>
+    <header>
+        <h1>Reportes</h1>
+    </header>
+
     <section>
-        <button onclick="location.href='/'" class="back-button">Volver al Inicio</button>
-        <h1>Reportes de Ventas</h1>
-
-        <form method="POST" action="/reportes">
-            <label for="vendedor">Vendedor:</label>
-            <select name="vendedor">
-                <option value="Todos" {% if not vendedor or vendedor == "Todos" %}selected{% endif %}>Todos</option>
-                {% for vendedor_item in vendedores %}
-                <option value="{{ vendedor_item['vendedor'] }}" {% if vendedor_item['vendedor'] == vendedor %}selected{% endif %}>
-                    {{ vendedor_item['vendedor'] }}
-                </option>
-                {% endfor %}
-            </select>
-
-            <label for="categoria">Categoría:</label>
-            <select name="categoria">
-                <option value="Todas" {% if not categoria or categoria == "Todas" %}selected{% endif %}>Todas</option>
-                <option value="Grandes" {% if categoria == "Grandes" %}selected{% endif %}>Grandes</option>
-                <option value="Doble yema" {% if categoria == "Doble yema" %}selected{% endif %}>Doble yema</option>
-                <option value="Medianos" {% if categoria == "Medianos" %}selected{% endif %}>Medianos</option>
-            </select>
-
+        <h2>Consultar Info.</h2>
+        <form method="POST">
             <label for="fecha_inicio">Fecha Inicio:</label>
-            <input type="date" name="fecha_inicio" value="{{ fecha_inicio }}">
+            <input type="date" name="fecha_inicio" required>
 
             <label for="fecha_fin">Fecha Fin:</label>
-            <input type="date" name="fecha_fin" value="{{ fecha_fin }}">
+            <input type="date" name="fecha_fin" required>
 
-            <button type="submit">Filtrar</button>
+            <label for="vendedor">Vendedor:</label>
+            <input type="text" name="vendedor" placeholder="Ingrese nombre del vendedor (opcional)">
+
+            <button type="submit">Generar Reporte</button>
         </form>
 
-        <h2>Resultados</h2>
-        {% if reportes %}
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>Vendedor</th>
-                        <th>Categoría</th>
-                        <th>Maplets</th>
-                        <th>Cajas</th>
-                        <th>Fecha</th>
-                        <th>Total Huevos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for reporte in reportes %}
-                    <tr>
-                        <td>{{ fecha_inicio if fecha_inicio else 'Sin Filtro' }}</td>
-                        <td>{{ fecha_fin if fecha_fin else 'Sin Filtro' }}</td>
-                        <td>{{ reporte['vendedor'] }}</td>
-                        <td>{{ reporte['categoria'] }}</td>
-                        <td>{{ reporte['maplets'] }}</td>
-                        <td>{{ reporte['cajas'] }}</td>
-                        <td>{{ reporte['fecha'] }}</td>
-                        <td>{{ reporte['maplets'] * 30 + reporte['cajas'] * 6 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        {% if ventas_maplets or ventas_cajas %}
+        <h2>Ventas de Maplets</h2>
+        <table border="1">
+            <tr>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+            </tr>
+            {% for venta in ventas_maplets %}
+            <tr>
+                <td>{{ venta['fecha'] }}</td>
+                <td>{{ venta['vendedor'] }}</td>
+                <td>{{ venta['categoria'] }}</td>
+                <td>{{ venta['cantidad'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
 
-        <div class="buttons">
-            <form method="POST" action="/exportar_excel">
-                <input type="hidden" name="vendedor" value="{{ vendedor }}">
-                <input type="hidden" name="categoria" value="{{ categoria }}">
-                <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
-                <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
-                <button type="submit">Exportar a Excel</button>
-            </form>
+        <h2>Ventas de Cajas</h2>
+        <table border="1">
+            <tr>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Cantidad</th>
+            </tr>
+            {% for venta in ventas_cajas %}
+            <tr>
+                <td>{{ venta['fecha'] }}</td>
+                <td>{{ venta['vendedor'] }}</td>
+                <td>{{ venta['cantidad'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h2>Porcentaje de Postura por Carro</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Carro</th>
+                    <th>Cantidad de Gallinas</th>
+                    <th>Cantidad de Huevos Recolectados</th>
+                    <th>Porcentaje de Postura</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for postura in postura_por_carro %}
+                <tr>
+                    <td>{{ postura.carro }}</td>
+                    <td>{{ postura.cantidad_gallinas }}</td>
+                    <td>{{ postura.cantidad_huevos }}</td>
+                    <td>{{ postura.porcentaje_postura }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-            <form method="POST" action="/ver_grafico">
-                <input type="hidden" name="vendedor" value="{{ vendedor }}">
-                <input type="hidden" name="categoria" value="{{ categoria }}">
-                <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
-                <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
-                <button type="submit">Ver Gráfico</button>
-            </form>
-        </div>
+        <form action="/exportar_reportes" method="POST">
+            <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
+            <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
+            <input type="hidden" name="vendedor" value="{{ vendedor }}">
+            <button type="submit">Exportar a Excel</button>
+        </form>
 
-        {% if graph_path %}
-        <h3 class="graph-title">Distribución de Ventas</h3>
-        <div class="graph-container">
-            <img src="{{ url_for('static', filename='images/ventas_pie_chart.png') }}" alt="Gráfico de Ventas">
-        </div>
         {% endif %}
-        {% endif %}
+
     </section>
+    <div class="volver">
+        <a href="/">Volver al Inicio</a>
+    </div>
 </body>
 
 </html>

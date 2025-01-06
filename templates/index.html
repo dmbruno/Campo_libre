@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campo Libre</title>
+    <title>Campo Libre - Inicio</title>
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <h1>Campo Libre</h1>
-    <div>
-        <button onclick="location.href='/recolecciones'">Recolectar</button>
-        <button onclick="location.href='/ventas'">Ventas</button>
-        <button onclick="location.href='/resumen'">Resumen</button>
-        <button onclick="location.href='/reportes'">Reportes</button>
-    </div>
+    <header>
+        <h1>Campo Libre</h1>
+    </header>
+    <section>
+        <div class="menu">
+            <a href="/carros" class="button">Carros</a>
+            <a href="/recolectar" class="button">Recolectar</a>
+            <a href="/armado" class="button">Armado</a>
+            <a href="/venta_cajas" class="button hidden">Venta de Cajas</a>
+            <a href="/venta_maplets" class="button hidden"  >Venta de Maplets</a>
+            <a href="/stock" class="button hidden">Stock TOTAL HUEVOS</a>
+            <a href="/stock_maplets_cajas" class="button hidden">Stock TOTAL MAPLETS Y CAJAS</a>
+            <a href="/ventas" class="button">ventas</a>
+            <a href="/stock" class="button">Stock</a>
+            <a href="/reportes" class="button">Reportes</a>
+            <a href="/posturas" class="button">ver posturas</a>
+        </div>
+    </section>
 </body>
-
 </html>

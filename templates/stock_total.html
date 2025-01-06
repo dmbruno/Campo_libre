@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Total de Huevos</title>
+</head>
+<body>
+    <header>
+        <h1>Stock Total de Huevos</h1>
+    </header>
+
+    <section>
+        <h2>Stock de Huevos Disponibles</h2>
+        <p>
+            {% if stock_total %}
+                La cantidad total de huevos es: {{ stock_total['cantidad_huevos'] }} huevos.
+            {% else %}
+                No hay datos de stock disponibles.
+            {% endif %}
+        </p>
+
+        <a href="/">Volver al Inicio</a>
+    </section>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venta de Maplets</title>
+</head>
+<body>
+    <header>
+        <h1>Venta de Maplets</h1>
+    </header>
+
+    <section>
+        <h2>Registrar Venta de Maplets</h2>
+        <form method="POST">
+            <label for="vendedor">Nombre del Vendedor:</label>
+            <input type="text" name="vendedor" required>
+        
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+        
+            <label for="categoria_maplet">Categoría de Maplet:</label>
+            <select name="categoria_maplet" required>
+                <option value="Premium">Premium</option>
+                <option value="Grandes">Grandes</option>
+                <option value="Medianos">Medianos</option>
+                <option value="Pequeños">Pequeños</option>
+                <option value="Doble Yema">Doble Yema</option>
+            </select>
+        
+            <label for="cantidad_maplets">Cantidad de Maplets:</label>
+            <input type="number" name="cantidad_maplets" required>
+        
+            <button type="submit">Guardar Venta de Maplets</button>
+        </form>
+
+        <h2>Historial de Ventas de Maplets</h2>
+        <table>
+            <tr>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+            </tr>
+            {% for venta in ventas_maplets %}
+            <tr>
+                <td>{{ venta['fecha'] }}</td>
+                <td>{{ venta['vendedor'] }}</td>
+                <td>{{ venta['categoria'] }}</td>
+                <td>{{ venta['cantidad'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/">Volver al Inicio</a>
+    </section>
+</body>
+</html>

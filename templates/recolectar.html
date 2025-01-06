@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Campo Libre - Recolección de Huevos</title>
+    <link rel="stylesheet" href="/static/css/recolectar.css">
+</head>
+<body>
+    <header>
+        <h1>Recolección de Huevos</h1>
+    </header>
+
+    <section>
+        <h2>Cargar Recolección</h2>
+        <form action="/recolectar" method="POST">
+            <label for="carro">Carro:</label>
+            <select name="carro" id="carro" required>
+                <option value="1">Carro 1</option>
+                <option value="2">Carro 2</option>
+                <option value="3">Carro 3</option>
+            </select>
+            
+            <label for="cantidad_huevos">Cantidad de Huevos:</label>
+            <input type="number" name="cantidad_huevos" id="cantidad_huevos" required>
+
+            <label for="huevos_rotos">Huevos Rotos:</label>
+            <input type="number" name="huevos_rotos" id="huevos_rotos" required>
+
+            <label for="turno">Turno:</label>
+            <select name="turno" id="turno" required>
+                <option value="11:30">11:30</option>
+                <option value="15:30">15:30</option>
+            </select>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" id="fecha" required>
+
+            <button type="submit">Guardar</button>
+        </form>
+
+        <h2>Historial de Recolecciones</h2>
+        <div class="historial-container ">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Carro</th>
+                        <th>Cantidad de Huevos</th>
+                        <th>Huevos Rotos</th>
+                        <th>Turno</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recoleccion in recolecciones %}
+                    <tr>
+                        <td>{{ recoleccion['carro'] }}</td>
+                        <td>{{ recoleccion['cantidad_huevos'] }}</td>
+                        <td>{{ recoleccion['huevos_rotos'] }}</td>
+                        <td>{{ recoleccion['turno'] }}</td>
+                        <td>{{ recoleccion['fecha'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    
+        <a class="volver" href="/">Volver al Inicio</a>
+    
+
+    <script src="/static/js/recolectar.js"></script>
+</body>
+</html>

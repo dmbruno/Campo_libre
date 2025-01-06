@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock de Maplets y Cajas</title>
+</head>
+<body>
+    <header>
+        <h1>Stock de Maplets y Cajas</h1>
+    </header>
+
+    <section>
+        <h2>Stock de Maplets</h2>
+        <table border="1">
+            <tr>
+                <th>Categoría</th>
+                <th>Cantidad Total</th>
+            </tr>
+            {% for maplet in maplets %}
+            <tr>
+                <td>{{ maplet['categoria'] }}</td>
+                <td>{{ maplet['total_maplets'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Stock de Cajas</h2>
+        <table border="1">
+            <tr>
+                <th>Cantidad Total</th>
+            </tr>
+            <tr>
+                <td>{{ cajas['total_cajas'] }}</td>
+            </tr>
+        </table>
+
+        <a href="/">Volver al Inicio</a>
+    </section>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Stock Total</title>
+    <link rel="stylesheet" href="/static/css/stock.css">
+</head>
+
+<body>
+    <header>
+        <h1>Stock Total</h1>
+    </header>
+
+    <section>
+
+        <div class="content">
+            <!-- Stock de Huevos -->
+            <div id="huevos" class="active">
+                <h2>Stock de Huevos Disponibles</h2>
+                <div class="stock">
+                    {% if stock_huevos %}
+                    STOCK TOTAL: {{ stock_huevos['cantidad_huevos'] }} HUEVOS.
+                    {% else %}
+                    No hay datos de stock disponibles.
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Stock de Maplets y Cajas -->
+            <div id="maplets">
+                <h2>Stock de Maplets</h2>
+                <table>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Cantidad Total</th>
+                    </tr>
+                    {% for maplet in maplets %}
+                    <tr>
+                        <td>{{ maplet['categoria'] }}</td>
+                        <td>{{ maplet['total_maplets'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h2>Stock de Cajas</h2>
+                <table>
+                    <tr>
+                        <th>Cantidad Total</th>
+                    </tr>
+                    <tr>
+                        <td>{{ cajas['total_cajas'] }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="volver">
+        <a href="/">Volver al Inicio</a>
+    </div>
+
+    <script src="/static/js/stock.js"></script>
+</body>
+
+</html>

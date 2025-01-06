@@ -1,87 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ventas</title>
-    <link rel="stylesheet" href="/static/css/ventas.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Ventas</title>
+    <link rel="stylesheet" href="/static/css/ventas.css">
 </head>
+
 <body>
-    <section>
-        <button onclick="location.href='/'" class="volver-index-btn">Volver al Inicio</button>
+    <header>
         <h1>Ventas</h1>
- 
-        <form method="POST" action="/ventas">
-            <label for="vendedor">Vendedor:</label>
-            <input type="text" name="vendedor" required>
+    </header>
 
-            <label for="categoria">Categoría:</label>
-            <select name="categoria" required>
-                <option value="Grandes">Grandes</option>
-                <option value="Premium">Premium</option>
-                <option value="Medianos">Medianos</option>
-                <option value="Doble yema">Doble yema</option>
-                <option value="Rotos">Rotos</option>
-            </select>
-
-            <label for="maplets">Maplets:</label>
-            <input type="number" name="maplets" required>
-
-            <label for="cajas">Cajas:</label>
-            <input type="number" name="cajas" required>
-
-            <label for="fecha">Fecha:</label>
-            <input type="date" name="fecha" value="{{ datetime.now().strftime('%Y-%m-%d') }}" required>
-
-            <button type="submit">Registrar Venta</button>
-        </form>
-    </section>
-    
-
-    {% if mensaje %}
-    <p class="mensaje">{{ mensaje }}</p>
-    {% endif %}
-
-    <!-- Resumen de Stock -->
     <section>
-        <h2>Resumen de Stock</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Categoría</th>
-                    <th>Total Huevos</th>
-                    <th>Maplets Disponibles</th>
-                    <th>Cajas Disponibles</th>
-                    <th>Sobrantes</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in stock %}
-                <tr>
-                    <td>{{ item['categoria'] }}</td>
-                    <td>{{ item['total_huevos'] }}</td>
-                    <td>{{ item['total_huevos'] // 30 }}</td>
-                    <td>{{ item['total_huevos'] // 6 }}</td>
-                    <td>{{ item['total_huevos'] % 6 }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+        <div class="tab-buttons">
+            <button class="tab-button active" id="maplets-tab">Venta de Maplets</button>
+            <button class="tab-button" id="cajas-tab">Venta de Cajas</button>
+        </div>
 
-    <!-- Historial de Ventas -->
-    <section>
-        <h2>Historial de Ventas</h2>
-        <div class="historial-ventas">
-            <ul>
-                {% for venta in ventas %}
-                <li>{{ venta['vendedor'] }} - {{ venta['categoria'] }}: {{ venta['maplets'] }} maplets, {{ venta['cajas'] }} cajas ({{ venta['fecha'] }})</li>
-                {% endfor %}
-            </ul>
+        <!-- Formulario para Venta de Maplets -->
+        <div class="form-container" id="maplets-form">
+            <h2>Venta de Maplets</h2>
+            <form method="POST">
+                <input type="hidden" name="venta_maplets" value="true">
+
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" name="vendedor" required>
+
+                <label for="fecha">Fecha:</label>
+                <input type="date" name="fecha" required>
+
+                <label for="categoria_maplet">Categoría de Maplet:</label>
+                <select name="categoria_maplet" required>
+                    <option value="Premium">Premium</option>
+                    <option value="Grandes">Grandes</option>
+                    <option value="Medianos">Medianos</option>
+                    <option value="Pequeños">Pequeños</option>
+                    <option value="Doble Yema">Doble Yema</option>
+                </select>
+
+                <label for="cantidad_maplets">Cantidad de Maplets:</label>
+                <input type="number" name="cantidad_maplets" required>
+
+                <button type="submit">Guardar Venta de Maplets</button>
+            </form>
+        </div>
+
+        <!-- Formulario para Venta de Cajas -->
+        <div class="form-container" id="cajas-form" style="display: none;">
+            <h2>Venta de Cajas</h2>
+            <form method="POST">
+                <input type="hidden" name="venta_cajas" value="true">
+
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" name="vendedor" required>
+
+                <label for="fecha">Fecha:</label>
+                <input type="date" name="fecha" required>
+
+                <label for="cantidad_cajas">Cantidad de Cajas:</label>
+                <input type="number" name="cantidad_cajas" required>
+
+                <button type="submit">Guardar Venta de Cajas</button>
+            </form>
         </div>
     </section>
+    
+    <a href="/">Volver al Inicio</a>
+
+    <script src="/static/js/ventas.js"></script>
 </body>
+
 </html>
