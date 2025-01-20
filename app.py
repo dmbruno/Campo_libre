@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
 import sqlite3
 import pandas as pd
 from io import BytesIO
 import pandas as pd
+from stock_routes import ajustes_stock_bp
+
 
 app = Flask(__name__)
 
+
+app.register_blueprint(ajustes_stock_bp)
 
 @app.route('/')
 def index():
@@ -25,9 +29,9 @@ def carros():
 
         # Insertar o actualizar datos del carro con la fecha de modificación
         cursor.execute("""
-            INSERT INTO gallinas_carro (carro, cantidad_gallinas, fecha) 
-            VALUES (?, ?, ?) 
-            ON CONFLICT(carro) 
+            INSERT INTO gallinas_carro (carro, cantidad_gallinas, fecha)
+            VALUES (?, ?, ?)
+            ON CONFLICT(carro)
             DO UPDATE SET cantidad_gallinas=excluded.cantidad_gallinas, fecha=excluded.fecha
         """, (carro, cantidad_gallinas, fecha))
 
@@ -66,7 +70,7 @@ def recolectar():
         # Verificar si existe el registro en stock_total
         cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
         stock_actual = cursor.fetchone()
-        
+
         if stock_actual:
             # Si existe, actualizar el stock total de huevos
             nuevo_stock = stock_actual['cantidad_huevos'] + cantidad_huevos
@@ -96,70 +100,52 @@ def armado():
         cantidad = int(request.form['cantidad_maplets'] if tipo == 'maplet' else request.form['cantidad_cajas'])
         fecha = request.form['fecha_maplet'] if tipo == 'maplet' else request.form['fecha_caja']
 
-        # Validar existencia de stock total
-        cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
+        # Calcular el stock total consolidado
+        cursor.execute("SELECT SUM(cantidad_huevos) AS stock_total FROM stock_total")
         stock_actual = cursor.fetchone()
-        if not stock_actual:
-            conn.close()
-            return "Error: No se encuentra el stock total."
-
-        # Extraer la cantidad actual de huevos
-        stock_huevos = stock_actual['cantidad_huevos']
+        stock_huevos = stock_actual['stock_total'] if stock_actual and stock_actual['stock_total'] is not None else 0
 
         if tipo == 'maplet':
-            # Obtener la categoría del maplet
             categoria = request.form['categoria_maplet']
-
-            # Verificar que haya suficiente stock de huevos para los maplets
             huevos_necesarios = 30 * cantidad
+
             if stock_huevos < huevos_necesarios:
                 conn.close()
-                return "Error: No hay suficiente stock de huevos para armar los maplets."
+                return f"Error: No hay suficiente stock de huevos para armar los maplets. Huevos disponibles: {stock_huevos}, Huevos necesarios: {huevos_necesarios}."
 
-            # Restar huevos del stock total
-            nuevo_stock_huevos = stock_huevos - huevos_necesarios
-            cursor.execute("UPDATE stock_total SET cantidad_huevos = ? WHERE id = 1", (nuevo_stock_huevos,))
+            # Insertar un registro en stock_total para registrar la reducción
+            cursor.execute("INSERT INTO stock_total (cantidad_huevos, fecha_actualizacion) VALUES (?, DATE('now'))", (-huevos_necesarios,))
 
             # Actualizar o insertar el stock de maplets armados por categoría
             cursor.execute("SELECT cantidad FROM maplets_armados WHERE categoria = ?", (categoria,))
             stock_maplets = cursor.fetchone()
 
             if stock_maplets:
-                # Si existe la categoría, sumar al stock existente
                 nuevo_stock_maplets = stock_maplets['cantidad'] + cantidad
-                cursor.execute("UPDATE maplets_armados SET cantidad = ? WHERE categoria = ?", 
-                               (nuevo_stock_maplets, categoria))
+                cursor.execute("UPDATE maplets_armados SET cantidad = ? WHERE categoria = ?", (nuevo_stock_maplets, categoria))
             else:
-                # Si no existe la categoría, crear un nuevo registro
-                cursor.execute("INSERT INTO maplets_armados (categoria, cantidad, fecha) VALUES (?, ?, ?)",
-                               (categoria, cantidad, fecha))
+                cursor.execute("INSERT INTO maplets_armados (categoria, cantidad, fecha) VALUES (?, ?, ?)", (categoria, cantidad, fecha))
 
         elif tipo == 'caja':
-            # Verificar que haya suficiente stock de huevos para las cajas
             huevos_necesarios = 6 * cantidad
+
             if stock_huevos < huevos_necesarios:
                 conn.close()
-                return "Error: No hay suficiente stock de huevos para armar las cajas."
+                return f"Error: No hay suficiente stock de huevos para armar las cajas. Huevos disponibles: {stock_huevos}, Huevos necesarios: {huevos_necesarios}."
 
-            # Restar huevos del stock total
-            nuevo_stock_huevos = stock_huevos - huevos_necesarios
-            cursor.execute("UPDATE stock_total SET cantidad_huevos = ? WHERE id = 1", (nuevo_stock_huevos,))
+            # Insertar un registro en stock_total para registrar la reducción
+            cursor.execute("INSERT INTO stock_total (cantidad_huevos, fecha_actualizacion) VALUES (?, DATE('now'))", (-huevos_necesarios,))
 
             # Verificar si ya existe un registro para la fecha actual
             cursor.execute("SELECT id, cantidad FROM cajas_armadas WHERE fecha = ?", (fecha,))
             stock_cajas = cursor.fetchone()
 
             if stock_cajas:
-                # Si existe, actualizar la cantidad del registro
                 nuevo_stock_cajas = stock_cajas['cantidad'] + cantidad
-                cursor.execute("UPDATE cajas_armadas SET cantidad = ? WHERE id = ?", 
-                               (nuevo_stock_cajas, stock_cajas['id']))
+                cursor.execute("UPDATE cajas_armadas SET cantidad = ? WHERE id = ?", (nuevo_stock_cajas, stock_cajas['id']))
             else:
-                # Si no existe, crear un nuevo registro
-                cursor.execute("INSERT INTO cajas_armadas (cantidad, fecha) VALUES (?, ?)", 
-                               (cantidad, fecha))
+                cursor.execute("INSERT INTO cajas_armadas (cantidad, fecha) VALUES (?, ?)", (cantidad, fecha))
 
-        # Guardar los cambios
         conn.commit()
 
     # Mostrar el stock actualizado
@@ -167,10 +153,13 @@ def armado():
     maplets_armados = cursor.fetchall()
 
     cursor.execute("SELECT SUM(cantidad) AS total_cajas FROM cajas_armadas")
-    total_cajas_disponibles = cursor.fetchone()['total_cajas'] or 0  # Manejar NULL como 0
+    total_cajas_disponibles = cursor.fetchone()
+    total_cajas_disponibles = total_cajas_disponibles['total_cajas'] if total_cajas_disponibles else 0
 
-    cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
-    stock_total_huevos = cursor.fetchone()['cantidad_huevos']
+    # Calcular el stock total consolidado
+    cursor.execute("SELECT SUM(cantidad_huevos) AS stock_total FROM stock_total")
+    stock_total_huevos_row = cursor.fetchone()
+    stock_total_huevos = stock_total_huevos_row['stock_total'] if stock_total_huevos_row else 0
 
     conn.close()
 
@@ -180,7 +169,7 @@ def armado():
         stock_total=stock_total_huevos,
         total_cajas_disponibles=total_cajas_disponibles
     )
-
+    
 # Ruta para registrar ventas
 @app.route('/venta_maplets', methods=['GET', 'POST'])
 def venta_maplets():
@@ -260,7 +249,7 @@ def venta_cajas():
 
             # Actualizar el stock de cajas
             cursor.execute("UPDATE cajas_armadas SET cantidad = cantidad - ? WHERE id = 1", (cantidad_cajas,))
-            
+
             conn.commit()
             conn.close()
             return redirect(url_for('venta_cajas'))
@@ -388,10 +377,10 @@ def reportes():
         conn.close()
 
         return render_template(
-            'reportes.html', 
-            ventas_maplets=ventas_maplets, ventas_cajas=ventas_cajas, 
-            carros=carros, recolecciones=recolecciones, stock_total=stock_total, 
-            armado=armado, maplets_armados=maplets_armados, cajas_armadas=cajas_armadas, 
+            'reportes.html',
+            ventas_maplets=ventas_maplets, ventas_cajas=ventas_cajas,
+            carros=carros, recolecciones=recolecciones, stock_total=stock_total,
+            armado=armado, maplets_armados=maplets_armados, cajas_armadas=cajas_armadas,
             fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, vendedor=vendedor,
             postura_por_carro=postura_por_carro
         )
@@ -551,70 +540,7 @@ def posturas():
 
 
 
-@app.route('/ventas', methods=['GET', 'POST'])
-def ventas():
-    conn = sqlite3.connect('campo_libre.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
 
-    if request.method == 'POST':
-        if "venta_maplets" in request.form:
-            vendedor = request.form['vendedor']
-            fecha = request.form['fecha']
-            categoria_maplet = request.form['categoria_maplet']
-            cantidad_maplets = int(request.form['cantidad_maplets'])
-
-            # Verificar existencia de stock para maplets
-            cursor.execute("SELECT cantidad FROM maplets_armados WHERE categoria = ? ORDER BY fecha DESC LIMIT 1", (categoria_maplet,))
-            maplet_stock = cursor.fetchone()
-
-            if not maplet_stock or maplet_stock['cantidad'] < cantidad_maplets:
-                conn.close()
-                return "Error: No hay suficiente stock de maplets para vender."
-
-            # Registrar venta de maplets en la tabla de ventas de maplets
-            cursor.execute("INSERT INTO ventas_maplets (vendedor, categoria, cantidad, fecha) VALUES (?, ?, ?, ?)",
-                           (vendedor, categoria_maplet, cantidad_maplets, fecha))
-
-            # Restar de stock de maplets
-            nuevo_stock = maplet_stock['cantidad'] - cantidad_maplets
-            cursor.execute("UPDATE maplets_armados SET cantidad = ? WHERE categoria = ?",
-                           (nuevo_stock, categoria_maplet))
-
-        elif "venta_cajas" in request.form:
-            vendedor = request.form['vendedor']
-            fecha = request.form['fecha']
-            cantidad_cajas = int(request.form['cantidad_cajas'])
-
-            # Verificar existencia de stock para cajas
-            cursor.execute("SELECT SUM(cantidad) AS total_cajas FROM cajas_armadas")
-            stock_cajas = cursor.fetchone()['total_cajas']
-
-            if stock_cajas >= cantidad_cajas:
-                # Registrar venta de cajas
-                cursor.execute("INSERT INTO ventas_cajas (vendedor, cantidad, fecha) VALUES (?, ?, ?)",
-                               (vendedor, cantidad_cajas, fecha))
-
-                # Actualizar el stock de cajas
-                cursor.execute("UPDATE cajas_armadas SET cantidad = cantidad - ? WHERE id = 1", (cantidad_cajas,))
-            else:
-                conn.close()
-                return "Error: No hay suficiente stock de cajas para vender."
-
-        conn.commit()
-        conn.close()
-        return redirect(url_for('ventas'))
-
-    # Obtener historial de ventas de maplets y cajas
-    cursor.execute("SELECT * FROM ventas_maplets")
-    ventas_maplets = cursor.fetchall()
-
-    cursor.execute("SELECT * FROM ventas_cajas")
-    ventas_cajas = cursor.fetchall()
-
-    conn.close()
-
-    return render_template('ventas.html', ventas_maplets=ventas_maplets, ventas_cajas=ventas_cajas)
 
 
 @app.route('/stock')
@@ -623,15 +549,18 @@ def stock():
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    # Obtener stock total de huevos
-    cursor.execute("SELECT cantidad_huevos FROM stock_total ORDER BY fecha_actualizacion DESC LIMIT 1")
-    stock_huevos = cursor.fetchone()
+    # Obtener el valor consolidado de stock_total
+    cursor.execute("SELECT SUM(cantidad_huevos) AS total_huevos FROM stock_total")
+    stock_huevos_row = cursor.fetchone()
 
-    # Obtener stock de maplets
+    # Usar el nombre correcto de la columna (total_huevos) o asignar 0 si no hay datos
+    stock_huevos = stock_huevos_row['total_huevos'] if stock_huevos_row and stock_huevos_row['total_huevos'] is not None else 0
+
+    # Obtener el stock de maplets
     cursor.execute("SELECT categoria, SUM(cantidad) AS total_maplets FROM maplets_armados GROUP BY categoria")
     maplets = cursor.fetchall()
 
-    # Obtener stock de cajas
+    # Obtener el stock de cajas
     cursor.execute("SELECT SUM(cantidad) AS total_cajas FROM cajas_armadas")
     cajas = cursor.fetchone()
 
@@ -639,10 +568,134 @@ def stock():
 
     return render_template(
         'stock.html',
-        stock_huevos=stock_huevos,
+        stock_huevos={'total_huevos': stock_huevos},  # Pasar como un diccionario para el HTML
         maplets=maplets,
         cajas=cajas
     )
+    
+    
+@app.route('/ventas', methods=['GET', 'POST'])
+def ventas():
+    conn = sqlite3.connect('campo_libre.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        if "venta_maplets" in request.form:
+            # Procesar venta de maplets
+            vendedor = request.form['vendedor']
+            fecha = request.form['fecha']
+            categoria_maplet = request.form['categoria_maplet']
+            cantidad_maplets = int(request.form['cantidad_maplets'])
+
+            # Verificar el stock de maplets por categoría
+            cursor.execute("SELECT cantidad FROM maplets_armados WHERE categoria = ?", (categoria_maplet,))
+            maplet_stock = cursor.fetchone()
+
+            if not maplet_stock or maplet_stock['cantidad'] < cantidad_maplets:
+                conn.close()
+                return f"Error: No hay suficiente stock de maplets en la categoría '{categoria_maplet}'. Disponibles: {maplet_stock['cantidad'] if maplet_stock else 0}"
+
+            # Registrar la venta de maplets
+            cursor.execute("INSERT INTO ventas_maplets (vendedor, categoria, cantidad, fecha) VALUES (?, ?, ?, ?)",
+                           (vendedor, categoria_maplet, cantidad_maplets, fecha))
+
+            # Restar del stock de maplets
+            nuevo_stock_maplets = maplet_stock['cantidad'] - cantidad_maplets
+            cursor.execute("UPDATE maplets_armados SET cantidad = ? WHERE categoria = ?", (nuevo_stock_maplets, categoria_maplet))
+
+        elif "venta_cajas" in request.form:
+            # Procesar venta de cajas
+            vendedor = request.form['vendedor']
+            fecha = request.form['fecha']
+            cantidad_cajas = int(request.form['cantidad_cajas'])
+
+            # Verificar el stock total de cajas
+            cursor.execute("SELECT SUM(cantidad) AS total_cajas FROM cajas_armadas")
+            total_cajas_disponibles = cursor.fetchone()
+            total_cajas_disponibles = total_cajas_disponibles['total_cajas'] if total_cajas_disponibles else 0
+
+            if total_cajas_disponibles < cantidad_cajas:
+                conn.close()
+                return f"Error: No hay suficiente stock de cajas. Disponibles: {total_cajas_disponibles}"
+
+            # Registrar la venta de cajas
+            cursor.execute("INSERT INTO ventas_cajas (vendedor, cantidad, fecha) VALUES (?, ?, ?)",
+                           (vendedor, cantidad_cajas, fecha))
+
+            # Restar del stock de cajas armadas
+            cursor.execute("SELECT id, cantidad FROM cajas_armadas WHERE cantidad > 0 ORDER BY fecha ASC")
+            cajas_armadas = cursor.fetchall()
+
+            cantidad_restante = cantidad_cajas
+            for caja in cajas_armadas:
+                if cantidad_restante <= 0:
+                    break
+
+                if caja['cantidad'] <= cantidad_restante:
+                    cantidad_restante -= caja['cantidad']
+                    cursor.execute("UPDATE cajas_armadas SET cantidad = 0 WHERE id = ?", (caja['id'],))
+                else:
+                    nuevo_stock_cajas = caja['cantidad'] - cantidad_restante
+                    cursor.execute("UPDATE cajas_armadas SET cantidad = ? WHERE id = ?", (nuevo_stock_cajas, caja['id']))
+                    cantidad_restante = 0
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for('ventas'))
+
+    # Consultar el historial de ventas de maplets
+    cursor.execute("SELECT * FROM ventas_maplets")
+    ventas_maplets = cursor.fetchall()
+
+    # Consultar el historial de ventas de cajas
+    cursor.execute("SELECT * FROM ventas_cajas")
+    ventas_cajas = cursor.fetchall()
+
+    # Consultar el stock de maplets
+    cursor.execute("SELECT categoria, cantidad FROM maplets_armados")
+    stock_maplets = cursor.fetchall()
+
+    # Consultar el stock de cajas
+    cursor.execute("SELECT SUM(cantidad) AS total_cajas FROM cajas_armadas")
+    stock_cajas_row = cursor.fetchone()
+    stock_cajas = stock_cajas_row['total_cajas'] if stock_cajas_row else 0
+
+    conn.close()
+
+    return render_template('ventas.html', ventas_maplets=ventas_maplets, ventas_cajas=ventas_cajas, stock_maplets=stock_maplets, stock_cajas=stock_cajas)
+
+
+
+
+
+@app.route('/reset-database', methods=['POST'])
+def reset_database():
+    conn = sqlite3.connect('campo_libre.db')
+    cursor = conn.cursor()
+    try:
+        # Lista de tablas a borrar
+        tables = [
+            'recolecciones', 'armado', 'armados', 'cajas_armadas',
+            'gallinas_carro', 'maplets_armados', 'stock', 'stock_total',
+            'ventas', 'ventas_cajas', 'ventas_maplets'
+        ]
+
+        # Borrar contenido de cada tabla
+        for table in tables:
+            cursor.execute(f"DELETE FROM {table};")
+
+        conn.commit()
+        return jsonify({'message': 'Base de datos restablecida con éxito.'}), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'message': f'Error al restablecer la base de datos: {str(e)}'}), 500
+    finally:
+        conn.close()
+
+
+
+
 
 
 if __name__ == '__main__':

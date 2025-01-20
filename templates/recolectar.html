@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +10,24 @@
     <title>Campo Libre - Recolección de Huevos</title>
     <link rel="stylesheet" href="/static/css/recolectar.css">
 </head>
+
 <body>
     <header>
         <h1>Recolección de Huevos</h1>
     </header>
 
     <section>
-        <h2>Cargar Recolección</h2>
-        <form action="/recolectar" method="POST">
+        <h2>Cargar / Editar Recolección</h2>
+        <form id="form-recoleccion" action="/recolectar" method="POST">
+            <input type="hidden" name="id" id="recoleccion-id">
+
             <label for="carro">Carro:</label>
             <select name="carro" id="carro" required>
                 <option value="1">Carro 1</option>
                 <option value="2">Carro 2</option>
                 <option value="3">Carro 3</option>
             </select>
-            
+
             <label for="cantidad_huevos">Cantidad de Huevos:</label>
             <input type="number" name="cantidad_huevos" id="cantidad_huevos" required>
 
@@ -39,11 +43,11 @@
             <label for="fecha">Fecha:</label>
             <input type="date" name="fecha" id="fecha" required>
 
-            <button type="submit">Guardar</button>
+            <button type="submit" id="guardar-btn">Guardar</button>
         </form>
 
         <h2>Historial de Recolecciones</h2>
-        <div class="historial-container ">
+        <div class="historial-container">
             <table>
                 <thead>
                     <tr>
@@ -52,6 +56,7 @@
                         <th>Huevos Rotos</th>
                         <th>Turno</th>
                         <th>Fecha</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +67,13 @@
                         <td>{{ recoleccion['huevos_rotos'] }}</td>
                         <td>{{ recoleccion['turno'] }}</td>
                         <td>{{ recoleccion['fecha'] }}</td>
+                        <td>
+                            <form action="/recolectar" method="POST" style="display: inline;">
+                                <input type="hidden" name="id" value="{{ recoleccion['id'] }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="eliminar-btn">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -69,10 +81,10 @@
         </div>
     </section>
 
-    
-        <a class="volver" href="/">Volver al Inicio</a>
-    
+    <a class="volver" href="/">Volver al Inicio</a>
 
+    <!-- Archivo JS externo -->
     <script src="/static/js/recolectar.js"></script>
 </body>
+
 </html>

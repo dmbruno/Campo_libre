@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Neucha&display=swap" rel="stylesheet">
+    <title>Ajustes de Stock</title>
+    <link rel="stylesheet" href="/static/css/ajustes_stock.css">
+</head>
+
+<body>
+    <header>
+        <h1>Ajustes de Stock</h1>
+    </header>
+
+    <section>
+        <!-- Ajustar Huevos -->
+        <div>
+            <h2>Huevos</h2>
+            <p>Stock Actual: <span id="stock-huevos">{{ stock_huevos['total_huevos'] }}</span></p>
+            <input type="number" id="cantidad-huevos" placeholder="Cantidad a sumar o restar">
+            <button onclick="actualizarHuevos()">Actualizar</button>
+        </div>
+
+        <!-- Ajustar Maplets -->
+        <div>
+            <h2>Maplets</h2>
+            <table>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for maplet in maplets %}
+                <tr>
+                    <td>{{ maplet['categoria'] }}</td>
+                    <td id="stock-maplet-{{ maplet['categoria'] }}">{{ maplet['total_maplets'] }}</td>
+                    <td class="acciones">
+                        <input type="number" id="maplet-{{ maplet['categoria'] }}"
+                            placeholder="Cantidad a sumar o restar">
+                        <button data-categoria="{{ maplet['categoria'] }}"
+                            onclick="actualizarMapletDesdeBoton(this)">Actualizar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Ajustar Cajas -->
+        <div>
+            <h2>Cajas</h2>
+            <p>Stock Actual: <span id="stock-cajas">{{ cajas['total_cajas'] }}</span></p>
+            <input type="number" id="cantidad-cajas" placeholder="Cantidad a sumar o restar">
+            <button onclick="actualizarCajas()">Actualizar</button>
+        </div>
+
+        <div class="volver">
+            <a href="/stock">Volver a Stock</a>
+            <button class="btn-reset" onclick="resetDatabase()">Restablecer Base de Datos</button>
+        </div>
+    </section>
+
+
+
+    <script src="/static/js/ajustes_stock.js"></script>
+</body>
+
+</html>

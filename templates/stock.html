@@ -23,8 +23,8 @@
             <div id="huevos" class="active">
                 <h2>Stock de Huevos Disponibles</h2>
                 <div class="stock">
-                    {% if stock_huevos %}
-                    STOCK TOTAL: {{ stock_huevos['cantidad_huevos'] }} HUEVOS.
+                    {% if stock_huevos and stock_huevos['total_huevos'] is not none %}
+                    STOCK TOTAL: {{ stock_huevos['total_huevos'] }} HUEVOS.
                     {% else %}
                     No hay datos de stock disponibles.
                     {% endif %}

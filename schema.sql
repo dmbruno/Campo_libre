@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS recolecciones (
 -- Crear tabla de stock total (huevos recolectados en total)
 CREATE TABLE IF NOT EXISTS stock_total (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    cantidad_huevos INTEGER NOT NULL,
+    cantidad_huevos INTEGER,
     fecha_actualizacion DATE DEFAULT CURRENT_DATE
 );
 

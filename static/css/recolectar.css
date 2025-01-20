@@ -116,6 +116,8 @@ table th {
     overflow-y: scroll;  /* Activa el scroll solo para la tabla */
 }
 
+
+
 /* Links */
 .volver {
     color: #4caf50;
@@ -129,6 +131,10 @@ table th {
     color: #45a049;
 }
 
+.boton-eliminar{
+    background-color: red;
+    font-size: 0.7rem;
+}
 
 
 /* Responsive Design for mobile */

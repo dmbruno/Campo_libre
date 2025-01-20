@@ -103,6 +103,12 @@ h2{
     text-align: center;
 }
 
+
+.boton-eliminar{
+    background-color: red;
+    font-size: 0.7rem;
+}
+
 /* Links */
 a {
     color: #4caf50;
