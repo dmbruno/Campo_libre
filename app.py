@@ -55,31 +55,59 @@ def recolectar():
     cursor = conn.cursor()
 
     if request.method == 'POST':
-        carro = int(request.form['carro'])  # Convertir carro a entero
-        cantidad_huevos = int(request.form['cantidad_huevos'])
-        huevos_rotos = int(request.form['huevos_rotos'])
-        turno = request.form['turno']
-        fecha = request.form['fecha']
+        if request.form.get('_method') == 'DELETE':
+            # Eliminar una recolección
+            id_recoleccion = request.form.get('id')
+            if id_recoleccion:
+                # Opcional: obtener la cantidad de huevos que se eliminarán para actualizar el stock
+                cursor.execute("SELECT cantidad_huevos FROM recolecciones WHERE id = ?", (id_recoleccion,))
+                recoleccion = cursor.fetchone()
+                
+                if recoleccion:
+                    cantidad_huevos = recoleccion['cantidad_huevos']
 
-        # Registrar la recolección
-        cursor.execute(
-            "INSERT INTO recolecciones (carro, cantidad_huevos, huevos_rotos, turno, fecha) VALUES (?, ?, ?, ?, ?)",
-            (carro, cantidad_huevos, huevos_rotos, turno, fecha)
-        )
+                    # Borrar la recolección
+                    cursor.execute("DELETE FROM recolecciones WHERE id = ?", (id_recoleccion,))
 
-        # Verificar si existe el registro en stock_total
-        cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
-        stock_actual = cursor.fetchone()
+                    # Actualizar el stock_total restando esos huevos
+                    cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
+                    stock_actual = cursor.fetchone()
 
-        if stock_actual:
-            # Si existe, actualizar el stock total de huevos
-            nuevo_stock = stock_actual['cantidad_huevos'] + cantidad_huevos
-            cursor.execute("UPDATE stock_total SET cantidad_huevos = ? WHERE id = 1", (nuevo_stock,))
+                    if stock_actual:
+                        nuevo_stock = stock_actual['cantidad_huevos'] - cantidad_huevos
+                        cursor.execute("UPDATE stock_total SET cantidad_huevos = ? WHERE id = 1", (nuevo_stock,))
+
+                conn.commit()
+                conn.close()
+                return redirect(url_for('recolectar'))
+
         else:
-            # Si no existe, insertar el primer registro en stock_total
-            cursor.execute("INSERT INTO stock_total (cantidad_huevos) VALUES (?)", (cantidad_huevos,))
+            # Registrar una nueva recolección
+            carro = int(request.form['carro'])  # Convertir carro a entero
+            cantidad_huevos = int(request.form['cantidad_huevos'])
+            huevos_rotos = int(request.form['huevos_rotos'])
+            turno = request.form['turno']
+            fecha = request.form['fecha']
 
-        conn.commit()
+            # Registrar la recolección
+            cursor.execute(
+                "INSERT INTO recolecciones (carro, cantidad_huevos, huevos_rotos, turno, fecha) VALUES (?, ?, ?, ?, ?)",
+                (carro, cantidad_huevos, huevos_rotos, turno, fecha)
+            )
+
+            # Verificar si existe el registro en stock_total
+            cursor.execute("SELECT cantidad_huevos FROM stock_total WHERE id = 1")
+            stock_actual = cursor.fetchone()
+
+            if stock_actual:
+                # Si existe, actualizar el stock total de huevos
+                nuevo_stock = stock_actual['cantidad_huevos'] + cantidad_huevos
+                cursor.execute("UPDATE stock_total SET cantidad_huevos = ? WHERE id = 1", (nuevo_stock,))
+            else:
+                # Si no existe, insertar el primer registro en stock_total
+                cursor.execute("INSERT INTO stock_total (cantidad_huevos) VALUES (?)", (cantidad_huevos,))
+
+            conn.commit()
 
     # Obtener historial de recolecciones
     cursor.execute("SELECT * FROM recolecciones ORDER BY fecha DESC")
@@ -87,6 +115,10 @@ def recolectar():
 
     conn.close()
     return render_template('recolectar.html', recolecciones=recolecciones)
+
+
+
+
 
 
 @app.route('/armado', methods=['GET', 'POST'])
